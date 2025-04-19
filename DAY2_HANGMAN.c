@@ -25,6 +25,8 @@ void draw_hangman(int depth){
 }
 
 int main(){
+    
+    srand(time(NULL));
 
     struct word_with_hint word_list[] = {{"elephant","mammal with a trunk"},{"cat","a cute jerk which purrs"},
                                  {"lion","King of the jungle"} };
