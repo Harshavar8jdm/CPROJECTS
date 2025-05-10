@@ -24,6 +24,7 @@ struct bus_details {
     char date[12];
     char dept_time[10];
     char jour_time[10];
+    bool seats[50] = {false}; 
     float price;
 };
 
@@ -83,6 +84,16 @@ bool busExists(int busno) {
     return false;
 }
 
+void show_seatarr(const bus_details& b) {
+    cout << "\nSeat Layout (X = Booked, O = Available):\n";
+    for (int i = 0; i < b.avail_seats; ++i) {
+        cout << (b.seats[i] ? " X " : " O ");
+        if ((i + 1) % 3 == 0) cout << endl;
+    }
+    if (b.avail_seats % 3 != 0) cout << endl;
+}
+
+
 void show_sales() {
     cout << endl << "--------------" << endl;
     cout << "Total Sales: Rs. " << total_sales << endl;
@@ -132,6 +143,8 @@ void book_ticket() {
         return;
     }
 
+    show_seatarr(bus[bus_idx]);
+
     int qty;
     cout << "How many tickets do you want to book? ";
     while (!(cin >> qty) || qty <= 0) {
@@ -169,8 +182,18 @@ void book_ticket() {
         }
         
       
-        pass[starting_index + j].busno = bno;
-        
+        int seatno;
+        while (true) {
+                cout << "Choose seat number (1 to " << bus[bus_idx].avail_seats << "): ";
+                cin >> seatno;
+                if (seatno >= 1 && seatno <= bus[bus_idx].avail_seats && !bus[bus_idx].seats[seatno - 1]) {
+                    bus[bus_idx].seats[seatno - 1] = true;
+                    break;
+                } 
+                else {
+                    cout <<"Invalid or already booked seat. Try again.\n";
+                }
+            }
         cout << "End of Passenger " << (j + 1) << " entry.\n";
     }
     
